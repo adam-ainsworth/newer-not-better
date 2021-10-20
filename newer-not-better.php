@@ -49,26 +49,25 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 				return;
 			}
 			 
-			/*
 			$option_name = 'nnb_options';
 			delete_option($option_name);
 			delete_site_option($option_name);
-			*/
 		}
 
 		public static function init() {
-			// TODO - options
 			// TODO - add disable to plugins page
-			add_filter( 'site_transient_update_plugins', array( __CLASS__, 'disable_plugin_updates' ) );
+			add_filter( 'site_transient_update_plugins', [__CLASS__, 'disable_plugin_updates'] );
+			add_action( 'admin_menu', [__CLASS__, 'add_admin_menu'] );
+			add_action( 'admin_init', [__CLASS__, 'nnb_options_init'] );	
 		}
 		
-		function disable_plugin_updates( $value ) {
-			// TODO - get from options
-			$plugin_paths = [
-				'wp-migrate-db/wp-migrate-db.php',
-			];
-
+		public static function disable_plugin_updates( $value ) {
 			if ( isset($value) && is_object($value) ) {
+				// TODO - get from options
+				$options = get_option( 'nnb_options' );
+				$plugin_paths_raw = $options['plugins'];
+				$plugin_paths = preg_split('/\r\n|\r|\n/', $plugin_paths_raw);
+
 				foreach( $plugin_paths as $plugin_path ) {
 					if ( isset( $value->response[$plugin_path] ) ) {
 						unset( $value->response[$plugin_path] );
@@ -77,8 +76,63 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			}
 
 			return $value;
+		}		
+		
+		public static function add_admin_menu() { 
+			add_options_page(
+				'Newer Not Better',
+				'Newer Not Better',
+				'manage_options',
+				'newer_not_better',
+				[__CLASS__, 'options_page']
+			);
 		}
-
+		
+		public static function nnb_options_init() { 
+			register_setting( 'nnb_options', 'nnb_options' );
+		
+			add_settings_section(
+				'nnb_options_section', 
+				__( '', 'newer-not-better' ), 
+				[__CLASS__, 'nnb_options_section_callback'], 
+				'nnb_options'
+			);
+		
+			add_settings_field( 
+				'plugins', 
+				__( 'Plugin paths', 'newer-not-better' ), 
+				[__CLASS__, 'plugins_render'], 
+				'nnb_options', 
+				'nnb_options_section' 
+			);
+		}
+		
+		public static function plugins_render() { 
+			$options = get_option( 'nnb_options' );
+			?>
+			<textarea cols='40' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
+			<?php
+		}		
+		
+		public static function nnb_options_section_callback() { 
+			echo __( 'Enter the plugin paths, one on each line', 'newer-not-better' );
+		}
+		
+		public static function options_page() { 
+				?>
+				<form action='options.php' method='post'>
+		
+					<h2>Newer Not Better</h2>
+		
+					<?php
+					settings_fields( 'nnb_options' );
+					do_settings_sections( 'nnb_options' );
+					submit_button();
+					?>
+		
+				</form>
+				<?php
+		}
 	}
 
 	register_activation_hook( __FILE__, [ 'Newer_Not_Better', 'activate' ] );
