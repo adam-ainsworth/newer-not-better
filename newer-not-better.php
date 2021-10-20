@@ -58,16 +58,21 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			// TODO - add disable to plugins page
 			add_filter( 'site_transient_update_plugins', [__CLASS__, 'disable_plugin_updates'] );
 			add_action( 'admin_menu', [__CLASS__, 'add_admin_menu'] );
-			add_action( 'admin_init', [__CLASS__, 'nnb_options_init'] );	
+			add_action( 'admin_init', [__CLASS__, 'nnb_options_init'] );
+		}
+
+		public static function get_plugins() {
+			$options = get_option( 'nnb_options' );
+			$plugin_paths_raw = $options['plugins'];
+			$plugin_paths = preg_split('/\r\n|\r|\n/', $plugin_paths_raw);
+
+			return $plugin_paths;
 		}
 		
 		public static function disable_plugin_updates( $value ) {
 			if ( isset($value) && is_object($value) ) {
-				// TODO - get from options
-				$options = get_option( 'nnb_options' );
-				$plugin_paths_raw = $options['plugins'];
-				$plugin_paths = preg_split('/\r\n|\r|\n/', $plugin_paths_raw);
-
+				$plugin_paths = self::get_plugins();
+				
 				foreach( $plugin_paths as $plugin_path ) {
 					if ( isset( $value->response[$plugin_path] ) ) {
 						unset( $value->response[$plugin_path] );
@@ -107,31 +112,38 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			);
 		}
 		
-		public static function plugins_render() { 
+		public static function plugins_render() {
 			$options = get_option( 'nnb_options' );
 			?>
-			<textarea cols='40' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
+			<textarea cols='80' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
 			<?php
 		}		
 		
 		public static function nnb_options_section_callback() { 
-			echo __( 'Enter the plugin paths, one on each line', 'newer-not-better' );
+			?><p><strong><?php echo __( 'Enter the required plugin paths from below, one on each line.', 'newer-not-better' ); ?></strong></p><?php
+
+			$active_plugins = get_option('active_plugins');
+			?>
+				<ul>
+					<?php foreach( $active_plugins as $active_plugin_path ) : ?>
+						<li><?php echo( $active_plugin_path ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php
 		}
 		
 		public static function options_page() { 
-				?>
-				<form action='options.php' method='post'>
-		
+			?>
+				<form action='options.php' method='post'>		
 					<h2>Newer Not Better</h2>
 		
 					<?php
-					settings_fields( 'nnb_options' );
-					do_settings_sections( 'nnb_options' );
-					submit_button();
+						settings_fields( 'nnb_options' );
+						do_settings_sections( 'nnb_options' );
+						submit_button();
 					?>
-		
 				</form>
-				<?php
+			<?php
 		}
 	}
 
