@@ -6,7 +6,7 @@
  * Plugin URI:        https://adamainsworth.co.uk/plugins/
  * Description:       Prevents selected plugins bugging you about updates.
  * Version:           1.0.0
- * Author:            adam.ainsworth
+ * Author:            Adam Ainsworth
  * Author URI:        https://adamainsworth.co.uk/
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
