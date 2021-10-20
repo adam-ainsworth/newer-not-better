@@ -60,7 +60,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			add_filter( 'plugin_action_links', [ __CLASS__, 'add_links' ], 10, 2 );
 			add_filter( 'site_transient_update_plugins', [__CLASS__, 'disable_plugin_updates'], 10, 1 );
 			add_action( 'admin_menu', [__CLASS__, 'add_admin_menu'] );
-			add_action( 'admin_init', [__CLASS__, 'nnb_options_init'] );
+			add_action( 'admin_init', [__CLASS__, 'options_init'] );
 		}
 
 		// add links to section on plugins page
@@ -78,6 +78,8 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 
 		// get a list of plugins in an array
 		public static function get_plugins() {
+			// TODO - get all plugins, not just active ones
+			// TODO - get friendly names, not just paths
 			$options = get_option( 'nnb_options' );
 			$plugin_paths_raw = $options['plugins'];
 			$plugin_paths = preg_split('/\r\n|\r|\n/', $plugin_paths_raw);
@@ -92,6 +94,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 				
 				foreach( $plugin_paths as $plugin_path ) {
 					if ( isset( $value->response[$plugin_path] ) ) {
+
 						unset( $value->response[$plugin_path] );
 					}
 				}
@@ -112,7 +115,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 		}
 		
 		// set up options and settings fields
-		public static function nnb_options_init() { 
+		public static function options_init() { 
 			register_setting( 'nnb_options', 'nnb_options' );
 		
 			add_settings_section(
@@ -163,6 +166,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 		// render settings fields
 		public static function plugins_render() {
 			$options = get_option( 'nnb_options' );
+			// TO DO add JS controlled checkboxes to control the contents of the text area, will will be hidden
 			?>
 			<textarea cols='80' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
 			<?php

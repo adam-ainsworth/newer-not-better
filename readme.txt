@@ -1,4 +1,5 @@
 === Newer Not Better ===
+
 Contributors: adam.ainsworth
 Donate link: https://adamainsworth.co.uk/donate/
 Tags: plugins, notifications, updates
@@ -37,25 +38,27 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 
 You can, although it's not recommended. This is only for plugins that you have a specific reason not to update. Most are well maintained, play nice and updates are usually better.
 
-To do so, just select all on the options page by clicking the checkbox at the top.
-
 = Can I re-enable updates to a plugin? =
 
-Of course, just deselect it in the plugin options page.
+Of course, just remove it in the options page.
 
 = Can I buy you a coffee for helping me avoid annoying updates / notifications =
 
-You don't have to, but if you would like to buy me a coffee or a beer, please visit https://adamainsworth.co.uk/donate
+You don't have to, but if you would like to buy me a coffee, beer, lunch or more please visit https://adamainsworth.co.uk/donate
+
+= What features will you add in the future? =
+
+Changing the options interface so that you can see the friendly name of the plugin in addition to its path, and also have a more user-friendly checkbox system.
+
+I will also add the ability to enable / disable updates directly from the plugins page.
+
+Please contact me if you would like any other enhancements - https://adamainsworth.co.uk/contact
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. The Newer Not Better options screen in 1.0.0
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.0 =
 * Initial release
