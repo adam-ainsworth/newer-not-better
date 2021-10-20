@@ -16,10 +16,12 @@
  * Tested up to:      5.8.1
  */
 
+ // redirect if some comes directly
 if ( ! defined( 'WPINC' ) && ! defined( 'ABSPATH' ) ) {
 	header('Location: /'); die;
 }
 
+// check that we're not defined somewhere else
 if ( ! class_exists( 'Newer_Not_Better' ) ) {
 	class Newer_Not_Better {
 		private function __construct() {}
@@ -55,12 +57,26 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 		}
 
 		public static function init() {
-			// TODO - add disable to plugins page
-			add_filter( 'site_transient_update_plugins', [__CLASS__, 'disable_plugin_updates'] );
+			add_filter( 'plugin_action_links', [ __CLASS__, 'add_links' ], 10, 2 );
+			add_filter( 'site_transient_update_plugins', [__CLASS__, 'disable_plugin_updates'], 10, 1 );
 			add_action( 'admin_menu', [__CLASS__, 'add_admin_menu'] );
 			add_action( 'admin_init', [__CLASS__, 'nnb_options_init'] );
 		}
 
+		// add links to section on plugins page
+		public static function add_links( $links, $file ) {
+			// TODO - add enable / disable to plugins page
+
+			if ( $file === 'newer-not-better/newer-not-better.php' && current_user_can( 'manage_options' ) ) {	
+				
+				$links = (array) $links;
+				$links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=newer_not_better' ), __( 'Settings', 'newer-not-better' ) );
+			}
+
+			return $links;
+		}
+
+		// get a list of plugins in an array
 		public static function get_plugins() {
 			$options = get_option( 'nnb_options' );
 			$plugin_paths_raw = $options['plugins'];
@@ -69,6 +85,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			return $plugin_paths;
 		}
 		
+		// run through all plugins in options and remove them from update list
 		public static function disable_plugin_updates( $value ) {
 			if ( isset($value) && is_object($value) ) {
 				$plugin_paths = self::get_plugins();
@@ -83,23 +100,25 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			return $value;
 		}		
 		
+		// add the item to the admin menu
 		public static function add_admin_menu() { 
 			add_options_page(
 				'Newer Not Better',
 				'Newer Not Better',
 				'manage_options',
 				'newer_not_better',
-				[__CLASS__, 'options_page']
+				[__CLASS__, 'options_page_render']
 			);
 		}
 		
+		// set up options and settings fields
 		public static function nnb_options_init() { 
 			register_setting( 'nnb_options', 'nnb_options' );
 		
 			add_settings_section(
 				'nnb_options_section', 
 				__( '', 'newer-not-better' ), 
-				[__CLASS__, 'nnb_options_section_callback'], 
+				[__CLASS__, 'settings_render'], 
 				'nnb_options'
 			);
 		
@@ -112,27 +131,8 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			);
 		}
 		
-		public static function plugins_render() {
-			$options = get_option( 'nnb_options' );
-			?>
-			<textarea cols='80' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
-			<?php
-		}		
-		
-		public static function nnb_options_section_callback() { 
-			?><p><strong><?php echo __( 'Enter the required plugin paths from below, one on each line.', 'newer-not-better' ); ?></strong></p><?php
-
-			$active_plugins = get_option('active_plugins');
-			?>
-				<ul>
-					<?php foreach( $active_plugins as $active_plugin_path ) : ?>
-						<li><?php echo( $active_plugin_path ); ?></li>
-					<?php endforeach; ?>
-				</ul>
-			<?php
-		}
-		
-		public static function options_page() { 
+		// render options page
+		public static function options_page_render() { 
 			?>
 				<form action='options.php' method='post'>		
 					<h2>Newer Not Better</h2>
@@ -145,6 +145,28 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 				</form>
 			<?php
 		}
+		
+		// render settings section
+		public static function settings_render() { 
+			?><p><strong><?php echo __( 'Enter the required plugin paths from below, one on each line.', 'newer-not-better' ); ?></strong></p><?php
+
+			$active_plugins = get_option('active_plugins');
+			?>
+				<ul>
+					<?php foreach( $active_plugins as $active_plugin_path ) : ?>
+						<li><?php echo( $active_plugin_path ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php
+		}
+		
+		// render settings fields
+		public static function plugins_render() {
+			$options = get_option( 'nnb_options' );
+			?>
+			<textarea cols='80' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
+			<?php
+		}		
 	}
 
 	register_activation_hook( __FILE__, [ 'Newer_Not_Better', 'activate' ] );
