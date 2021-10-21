@@ -5,6 +5,7 @@ Donate link: https://adamainsworth.co.uk/donate/
 Tags: plugins, notifications, updates
 Requires at least: 4.0.4
 Tested up to: 5.8
+Requires PHP: 5.2
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -23,6 +24,10 @@ What happens if you accidentally update? At best, it's a tedious downgrade proce
 
 *Until now!*
 
+**IMPORTANT** - You should only leave a plugin updated if you know what you are doing, familiar with the risks and willing to accept the consequences should an unpatched vulnerability be exploited on your site.
+
+**The plugin author cannot be held responsible for any loss or damages that occur as a result of using this plugin to disregard software updates!**
+
 == Installation ==
 
 1. Unpack the entire contents of this plugin zip file into your wp-content/plugins/ folder locally
@@ -34,9 +39,17 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 
 == Frequently Asked Questions ==
 
+= Is it safe to disable updates to a plugin? =
+
+Usually not. Almost all plugins have vulnerabilities, and these are patched when they are updated. By not updating you are leaving yourself open to possible vulnerabilities.
+
+**You should only leave a plugin on an old version if you know what you are doing, familiar with the risks and willing to accept the consequences should an unpatched vulnerability be exploited on your site.**
+
 = Can I select all plugins? =
 
 You can, although it's not recommended. This is only for plugins that you have a specific reason not to update. Most are well maintained, play nice and updates are usually better.
+
+Turning off updates on all plugins represents a large security risk to your site.
 
 = Can I re-enable updates to a plugin? =
 
@@ -44,7 +57,7 @@ Of course, just remove it in the options page.
 
 = Can I buy you a coffee for helping me avoid annoying updates / notifications =
 
-You don't have to, but if you would like to buy me a coffee, beer, lunch or more please visit https://adamainsworth.co.uk/donate
+You don't have to, but if you would like to buy me a coffee, beer, breakfast or more please visit https://adamainsworth.co.uk/donate
 
 = What features will you add in the future? =
 
@@ -57,6 +70,11 @@ Please contact me if you would like any other enhancements - https://adamainswor
 == Screenshots ==
 
 1. The Newer Not Better options screen in 1.0.0
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Initial release
 
 == Changelog ==
 

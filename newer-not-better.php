@@ -70,7 +70,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			if ( $file === 'newer-not-better/newer-not-better.php' && current_user_can( 'manage_options' ) ) {	
 				
 				$links = (array) $links;
-				$links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=newer_not_better' ), __( 'Settings', 'newer-not-better' ) );
+				$links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=newer_not_better' ), esc_html__( 'Settings', 'newer-not-better' ) );
 			}
 
 			return $links;
@@ -151,13 +151,13 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 		
 		// render settings section
 		public static function settings_render() { 
-			?><p><strong><?php echo __( 'Enter the required plugin paths from below, one on each line.', 'newer-not-better' ); ?></strong></p><?php
+			?><p><strong><?php esc_html_e( 'Enter the required plugin paths from below, one on each line.', 'newer-not-better' ); ?></strong></p><?php
 
 			$active_plugins = get_option('active_plugins');
 			?>
 				<ul>
 					<?php foreach( $active_plugins as $active_plugin_path ) : ?>
-						<li><?php echo( $active_plugin_path ); ?></li>
+						<li><?php echo( esc_html( $active_plugin_path ) ); ?></li>
 					<?php endforeach; ?>
 				</ul>
 			<?php
@@ -167,9 +167,11 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 		public static function plugins_render() {
 			$options = get_option( 'nnb_options' );
 			// TO DO add JS controlled checkboxes to control the contents of the text area, will will be hidden
-			?>
-			<textarea cols='80' rows='5' name='nnb_options[plugins]'><?php echo $options['plugins']; ?></textarea>
-			<?php
+			
+			printf(
+				'<textarea cols="80" rows="5" name="nnb_options[plugins]">%s</textarea>',
+				esc_textarea( $options['plugins'] )
+			);
 		}		
 	}
 
