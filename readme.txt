@@ -55,7 +55,7 @@ Turning off updates on all plugins represents a large security risk to your site
 
 Of course, just remove it in the options page.
 
-= Can I buy you a coffee for helping me avoid annoying updates / notifications =
+= Can I make a small donation to you for helping me avoid annoying updates / notifications? =
 
 You don't have to, but if you would like to buy me a coffee, beer, breakfast or more please visit https://adamainsworth.co.uk/donate
 
