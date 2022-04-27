@@ -81,7 +81,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			// TODO - get all plugins, not just active ones
 			// TODO - get friendly names, not just paths
 			$options = get_option( 'nnb_options' );
-			$plugin_paths_raw = $options['plugins'];
+			$plugin_paths_raw = isset($options['plugins']) ? $options['plugins'] : '';
 			$plugin_paths = preg_split('/\r\n|\r|\n/', $plugin_paths_raw);
 
 			return $plugin_paths;
@@ -170,7 +170,7 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 			
 			printf(
 				'<textarea cols="80" rows="5" name="nnb_options[plugins]">%s</textarea>',
-				esc_textarea( $options['plugins'] )
+				esc_textarea( isset($options['plugins']) ? $options['plugins'] : '' )
 			);
 		}		
 	}
