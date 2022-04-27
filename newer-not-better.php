@@ -153,11 +153,11 @@ if ( ! class_exists( 'Newer_Not_Better' ) ) {
 		public static function settings_render() { 
 			?><p><strong><?php esc_html_e( 'Enter the required plugin paths from below, one on each line.', 'newer-not-better' ); ?></strong></p><?php
 
-			$active_plugins = get_option('active_plugins');
+			$active_plugins = get_plugins();
 			?>
 				<ul>
-					<?php foreach( $active_plugins as $active_plugin_path ) : ?>
-						<li><?php echo( esc_html( $active_plugin_path ) ); ?></li>
+					<?php foreach( $active_plugins as $active_plugin_path => $active_plugin ) : ?>
+						<li><strong><?php echo($active_plugin['Name']); ?> (<?php echo($active_plugin['Version']); ?>)</strong> <a href="#" class="nnb-add"><?php echo( esc_html( $active_plugin_path ) ); ?></a></li>
 					<?php endforeach; ?>
 				</ul>
 			<?php
